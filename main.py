@@ -90,7 +90,7 @@ async def saveparty(ctx, file: str =""): #saves a party to a .txt file
         await ctx.send("Error: You have to specify a name for the party to save")   
     elif nameList == [] or idList == []:
         await ctx.send("Error: There is no party")
-    elif 1196121990134767696 not in [role.id for role in ctx.author.roles]:
+    elif variables.adminRole not in [role.id for role in ctx.author.roles]:
         await ctx.send("Error: You dont have an authorized role")
 
     else:
@@ -193,7 +193,7 @@ async def clearparty(ctx): #Clears the currently loaded party
 async def deleteparty(ctx, file: str = ""): #deletes the given party
 
     #check for errors
-    if 1196121990134767696 not in [role.id for role in ctx.author.roles]:
+    if variables.adminRole not in [role.id for role in ctx.author.roles]:
         await ctx.send("Error: You dont have an authorized role")
     elif file == "":
         await ctx.send("Error: Specify a party to delete")
