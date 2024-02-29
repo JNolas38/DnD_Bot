@@ -1,8 +1,9 @@
 import discord
 import random
-import os
+import os, asyncio
 from discord.ext import commands
 import variables
+from music_cog import music_cog
 
 client = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
@@ -221,7 +222,7 @@ async def deleteparty(ctx, file: str = ""): #deletes the given party
 
 
 
-@client.command()
+@client.command(name="roll", aliases=["r"])
 async def roll(ctx, arg1: str = "", arg2: str = "", arg3: str = ""): #Rolls a given number of die and adds given modifiers
     
     #Assign default values and initialize the final variables
@@ -349,6 +350,11 @@ async def dontusethisone(ctx): #just dont
 
 @client.command()
 async def h(ctx): #print a list of commands
-    await ctx.send("hello, bye, loadparty, saveparty, checkparty, partylist, clearparty, deleteparty, roll, coin, register, delete, charlist, dontusethisone")
+    await ctx.send("hello, bye, loadparty, saveparty, checkparty, partylist, clearparty, deleteparty, roll, coin, register, delete, charlist, play, pause, resume, skip, queue, clear, stop, remove, dontusethisone")
 
-client.run(variables.token)
+
+async def main():
+    await client.add_cog(music_cog(client))
+    await client.start(variables.token)
+
+asyncio.run(main())

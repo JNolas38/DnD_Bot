@@ -1,3 +1,4 @@
 variables.py
 backup.py
 *.txt
+__pycache__
