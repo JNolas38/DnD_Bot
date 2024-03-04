@@ -45,7 +45,7 @@ async def hello(ctx): #Greetings
 async def bye(ctx): #Farewells
     await ctx.send("Smell ya later")
 
-@client.command()
+@client.command(name="loadparty", aliases=["load", "lp"])
 async def loadparty(ctx, file: str=""): #Loads a party from a .txt file
     #Check for erros in command
     if file == "":
@@ -84,7 +84,7 @@ async def loadparty(ctx, file: str=""): #Loads a party from a .txt file
         else:
             await ctx.send("Party Loaded!")
 
-@client.command()
+@client.command(name="saveparty", aliases=["save", "sp"])
 async def saveparty(ctx, file: str =""): #saves a party to a .txt file
     #Check for errors
     if file == "":
@@ -122,7 +122,7 @@ async def saveparty(ctx, file: str =""): #saves a party to a .txt file
         f.close()
         await ctx.send("Party saved!")
 
-@client.command()
+@client.command(name="checkparty", aliases=["checkp"])
 async def checkparty(ctx, file: str=""): #check the characters of a given party
     
     #Initialize the final string
@@ -148,7 +148,7 @@ async def checkparty(ctx, file: str=""): #check the characters of a given party
         f.close()
         await ctx.send(finalStr)
         
-@client.command()
+@client.command(name="partylist", aliases=["plist", "pl"])
 async def partylist(ctx): #Prints list of currently saved parties
     
     #Initialize the final string
@@ -166,7 +166,7 @@ async def partylist(ctx): #Prints list of currently saved parties
     else:
         await ctx.send("Currently saved parties:\n" + finalStr)
 
-@client.command()
+@client.command(name="clearparty", aliases=["cp"])
 async def clearparty(ctx): #Clears the currently loaded party
     
     #Get comfirmation from the user
@@ -190,7 +190,7 @@ async def clearparty(ctx): #Clears the currently loaded party
         nameList.remove(nameList[0])
     await ctx.send("Party cleared")
 
-@client.command()
+@client.command(name="deleteparty", aliases=["dp", "delparty"])
 async def deleteparty(ctx, file: str = ""): #deletes the given party
 
     #check for errors
@@ -287,7 +287,7 @@ async def roll(ctx, arg1: str = "", arg2: str = "", arg3: str = ""): #Rolls a gi
 
     await ctx.send(name + (" rolled a " + finalStr))
 
-@client.command()
+@client.command(name="coin", aliases=["flip"])
 async def coin(ctx): #Flips a coin
     n = random.randint(1,2)
     if n == 1:
@@ -295,7 +295,7 @@ async def coin(ctx): #Flips a coin
     elif n == 2:
         await ctx.send(format(ctx.author.display_name) + " rolled Tails")
 
-@client.command()
+@client.command(name="register", aliases=["reg"])
 async def register(ctx, charName: str=""): #registers a new character and user
     #Check for errors
     if ctx.author.id in idList:
@@ -311,7 +311,7 @@ async def register(ctx, charName: str=""): #registers a new character and user
         nameList.append(charName)
         await ctx.send(format(ctx.author.display_name) + " registered the character " + charName)
 
-@client.command()
+@client.command(name="delete", aliases=["del", "deletechar"])
 async def delete(ctx): #Deletes the authors current character
     
     #Check for errors
@@ -328,7 +328,7 @@ async def delete(ctx): #Deletes the authors current character
         nameList.remove(charName)
         await ctx.send(format(ctx.author.display_name) + " deleted the character " + charName)
 
-@client.command()
+@client.command(name="charlist", aliases=["cl"])
 async def charlist(ctx): #Print all currently loaded characters
     
     #initialize final string
@@ -348,9 +348,35 @@ async def charlist(ctx): #Print all currently loaded characters
 async def dontusethisone(ctx): #just dont
     await ctx.send("https://tenor.com/view/dragon-dance-memw-dragon-dance-meme-dragon-meme-dance-gif-3939304025067010268")
 
-@client.command()
+@client.command(aliases=["commands"])
 async def h(ctx): #print a list of commands
-    await ctx.send("hello, bye, loadparty, saveparty, checkparty, partylist, clearparty, deleteparty, roll, coin, register, delete, charlist, play, pause, resume, skip, queue, clear, stop, remove, dontusethisone")
+    await ctx.send("""
+    ```
+commands:
+hello: greets the server
+bye: says goodbye
+loadparty: loads a party from a .txt file in the PartyDataBase directory
+saveparty: saves the currently loaded party unto a .txt file, with a name given by the user, in the PartyDataBase directory
+checkparty: names all the characters in a given .txt file in the PartyDataBase directory
+partylist: names all the currently saved parties
+clearparty: deletes all characters from the currently loaded party
+deleteparty: deleetes a given party saved as a .txt in the PartyDataBase directory
+roll: roll a given number of die (the players chooses how many sides the die have) and adds any given modifiers
+coin: flips a coin
+register: register the users character on the currently loaded party
+delete: delete the users current character
+charlist: names every character in the currently loaded party
+play: plays a song or adds it to the queue
+pause: pauses the current song
+resume: resumes the current song
+skip: skips the current song
+queue: lists all the songs currently queued
+clear: removes all songs currently queued
+stop: disconnects the bot from the voice channel
+remove: removes the last song added to the queue
+dontusethisone: a surprise!
+``` 
+    """)
 
 
 async def main():
