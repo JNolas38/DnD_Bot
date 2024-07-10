@@ -4,6 +4,7 @@ import os, asyncio
 from discord.ext import commands
 import variables
 from music_cog import music_cog
+from roulette_cog import roulette_cog
 
 client = commands.Bot(command_prefix='!', intents=discord.Intents.all())
 
@@ -374,6 +375,9 @@ queue: lists all the songs currently queued
 clear: removes all songs currently queued
 stop: disconnects the bot from the voice channel
 remove: removes the last song added to the queue
+buyin: add to your wallet
+bet: bet on the next spin
+spin: time to spin
 dontusethisone: a surprise!
 ``` 
     """)
@@ -381,6 +385,7 @@ dontusethisone: a surprise!
 
 async def main():
     await client.add_cog(music_cog(client))
+    await client.add_cog(roulette_cog(client))
     await client.start(variables.token)
 
 asyncio.run(main())

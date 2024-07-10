@@ -23,4 +23,7 @@ queue: lists all the songs currently queued
 clear: removes all songs currently queued
 stop: disconnects the bot from the voice channel
 remove: removes the last song added to the queue
+buyin: add to your wallet
+bet: bet on the next spin
+spin: time to spin
 dontusethisone: a surprise!
