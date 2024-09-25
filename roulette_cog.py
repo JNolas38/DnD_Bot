@@ -31,9 +31,15 @@ class roulette_cog (commands.Cog):
                     await ctx.send("You added " + str(amount) + " to your wallet! You now have " + str(self.wallets[n]))
 
     @commands.command (name="bet", aliases = ["placebet"], help="Place a bet for the next spin")
-    async def bet(self, ctx, amount: int, guess: str = ''):
+    async def bet(self, ctx, amount: int = 0, guess: str = ''):
 
-        if ctx.author.id not in self.playerlist:
+        if amount <= 0:
+            await ctx.send ("Error: You must specify how much you want to bet")
+            return
+        elif (guess.isnumeric() and (int(guess)>36 or int(guess)<0)):
+            await ctx.send ("Error: For single numbers you must bet between 0 and 36")
+            return
+        elif ctx.author.id not in self.playerlist:
             await ctx.send ("Error: You must first make a buy in before plassing a bet!")
             return
         for m in range (len(self.playerlist)):
@@ -99,29 +105,42 @@ class roulette_cog (commands.Cog):
 
 
         if spin != 0:
+            pair = 'odd'
+            dozen = 1
+
             if spin % 2 == 0:
                 pair = 'even'
-            else:
-                pair = 'odd'
+            
+            if (25 > spin > 12):
+                dozen =2
+            elif spin >= 25:
+                dozen = 3
+
+        half = 'high'
+        if spin < 18:
+            half = 'low'
 
         #process the spin
         for n in range(len(self.playerlist)):
             if self.table[n] != '':
-                win = True
                 user = self.bot.get_user(self.playerlist[n])
                 
                 #single number
                 if self.table[n] == str(spin):
                     pot = self.bets[n] * 35
+
+                #dozens                
+                elif (int(self.table[n][0]) == dozen and self.table[n][1] == 't'):
+                    pot = self.bets[n] * 2
+
                     
-                #even and odd
-                elif self.table[n] == pair:
+                #even/odd and high/low
+                elif self.table[n] == pair or self.table[n] == half:
                     pot = self.bets[n]
 
                 #loss
                 else:
                     pot = 0
-                    win = False
                     
                 #reset the bet
                 self.bets[n] = 0
@@ -129,7 +148,7 @@ class roulette_cog (commands.Cog):
                 self.table[n] = ''
                 
                 #message the winners and losers
-                if win:
+                if pot != 0:
                     await ctx.send("Congratulations! you won " + str(pot) + " and now have " + str(self.wallets[n]) + " on your wallet!")
                 else: 
                     await ctx.send("You lost " + format(user.display_name) + "! Remember 99 in 100 gamblers quit right before winning a jackpot!")
